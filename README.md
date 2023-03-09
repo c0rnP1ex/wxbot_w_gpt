@@ -6,12 +6,14 @@ Wechat Bot with GPT
 - proxy
 - api-key
 - initial_prompt
+
 然后运行wxbot.py
 
 ## 接下来要做的
 - 各个用户有独立的session
 - 可以保存读取过去的对话
 - 更完善的权限（现在做的就是依托答辩
+- 队列
 - 完善文档
 
 ## 存在的问题
