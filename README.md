@@ -1,6 +1,7 @@
 # wxbot_w_gpt
 Wechat Bot with GPT
 
+
 ## 如何使用
 在config.json文件下你应该填入以下信息
 - proxy
@@ -20,6 +21,7 @@ Wechat Bot with GPT
 - itchat-uos-fix
 
 然后运行re_wxbot.py(把wxbot.py重构了一遍)
+
 
 ## bot指令（在wx聊天框输入）
 普通用户：
@@ -47,9 +49,6 @@ Wechat Bot with GPT
 | /sys enable op_auth {true/false} | 打开/关闭op白名单 |
 
 
-
-
-
 ## 接下来要做的
 - 各个用户有独立的session
 - 可以读取过去的对话
@@ -57,11 +56,10 @@ Wechat Bot with GPT
 - 完善文档
 
 ## 存在的问题
-指令的匹配不能换行（玩不明白正则表达式
-
-如果/ask 后面的内容带有换行那换行符以后的内容不会进入message
 
 微信获取到的ActualName会变化，需要找到一种新的方式管理权限
 
 ## 参考
-gpt_api.py参考https://github.com/hzq1995/UI-of-chatGPT-API（做了一些小改动）
+gpt_api.py参考https://github.com/hzq1995/UI-of-chatGPT-API
+
+（做了一些小改动）
