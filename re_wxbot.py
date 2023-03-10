@@ -112,9 +112,6 @@ class wxbot:
 
     def help(self):
         if self.op_auth(send_res=False):
-            self.text_reply('用法：/ask {你的问题}\n'
-                            '/u add {content}')
-        else:
             self.text_reply('用法：\n'
                             '/help\t查看帮助\n'
                             '/ask {你的问题}\n'
@@ -132,6 +129,11 @@ class wxbot:
                             '/sys reload op\t重新加载op白名单\n'
                             '/sys enable group_auth {true/false}\t打开/关闭群组白名单\n'
                             '/sys enable op_auth {true/false}\t打开/关闭op白名单')
+
+        else:
+            self.text_reply('用法：\n'
+                            '/ask {你的问题}\n'
+                            '/u add {content}')
 
     def enable_group_auth(self, _bool):
         self.bool_group_auth = _bool
@@ -202,10 +204,11 @@ class wxbot:
                 return
             elif self.text == '/sys reload whitelist':
                 self.whitelist = get_whitelist()
-                self.text_reply('已重新加载白名单')
+                self.text_reply('已重新加载群组白名单')
                 return
             elif self.text == '/sys reload op':
                 self.load_op_auth()
+                self.text_reply('已重新加载op名单')
                 return
             elif self.text.startswith('/sys enable group_auth'):
                 pattern = r"/sys enable group_auth\s+(.*)"
