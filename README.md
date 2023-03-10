@@ -7,7 +7,7 @@ Wechat Bot with GPT
 - api-key
 - initial_prompt
 
-你的python env应当安装已下两个模块
+你的python env应当安装以下两个模块
 - openai
 - itchat-uos-fix
 
