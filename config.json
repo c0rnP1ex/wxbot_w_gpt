@@ -1,0 +1,10 @@
+[
+    {
+        "proxies": {
+            "http": "http://proxy:port",
+            "https": "http://proxy:port"
+        },
+        "api-key": "Your api-key",
+        "initial_prompt": "Your prompt"
+    }
+]
