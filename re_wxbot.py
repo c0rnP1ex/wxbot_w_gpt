@@ -115,7 +115,9 @@ class wxbot:
             self.text_reply('用法：/ask {你的问题}\n'
                             '/u add {content}')
         else:
-            self.text_reply('用法：/ask {你的问题}\n'
+            self.text_reply('用法：\n'
+                            '/help\t查看帮助\n'
+                            '/ask {你的问题}\n'
                             '/u add {content}\n'
                             '更多用法：\n'
                             '/sys su {password}\t切换到operator\n'
@@ -128,7 +130,7 @@ class wxbot:
                             '/sys save\t保存本轮对话\n'
                             '/sys reload whitelist\t重新加载群组白名单\n'
                             '/sys reload op\t重新加载op白名单\n'
-                            '/sys enable group_auth {true/false}\t打开/关闭群组白名单'
+                            '/sys enable group_auth {true/false}\t打开/关闭群组白名单\n'
                             '/sys enable op_auth {true/false}\t打开/关闭op白名单')
 
     def enable_group_auth(self, _bool):
