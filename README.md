@@ -7,6 +7,11 @@ Wechat Bot with GPT
 - api-key
 - initial_prompt
 
+在auth.json文件下你应该填入以下信息
+- accept_GroupName
+- accept_NickName
+- passwd
+
 你的python env应当安装以下两个模块
 - openai
 - itchat-uos-fix
@@ -27,6 +32,9 @@ Wechat Bot with GPT
 | ------------ | ------------ |
 | /init  | 保存本轮对话，并重置本轮对话 |
 | /save  | 保存本轮对话 |
+| /su {密码}| 切换为operator |
+| /su list | 查看现有管理员 |
+| /su reset | 清空所有管理员 |
 | /sys init {prompt}  | 自定义初始prompt |
 | /sys add {role} {content}  | 以指定role添加content，不返回回答 |
 | /print  | 输出本轮对话所有内容 |
@@ -35,7 +43,6 @@ Wechat Bot with GPT
 ## 接下来要做的
 - 各个用户有独立的session
 - 可以读取过去的对话
-- 更完善的权限管理（现在做的就是依托答辩
 - 队列
 - 完善文档
 
