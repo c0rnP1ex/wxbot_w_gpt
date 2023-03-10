@@ -1,13 +1,14 @@
 import openai
+import json
 
-proxies = {
-    "http": "http://127.0.0.1:port",
-    "https": "http://127.0.0.1:port"
-}
+with open('config.json', encoding='utf-8') as f:
+    config = json.load(f)
+
+proxies = config[0]['proxies']
 openai.proxy = proxies
 openai.proxy
 
-SECRET_KEY = # your api-key
+SECRET_KEY = config[0]['api-key']
 openai.api_key = SECRET_KEY
 
 ENGINE_LIST = openai.Engine.list()
@@ -17,7 +18,9 @@ TIME_OUT = 3
 
 BOT_ROLE = 'assistant'
 USER_ROLE = 'user'
-initial_prompt = # your prompt
+initial_prompt = config[0]['initial_prompt']
+
+
 class gpt_thread:
     def __init__(self) -> None:
         self.messages = []
@@ -27,15 +30,15 @@ class gpt_thread:
         response = []
         # self.messages.text.count
         response = openai.ChatCompletion.create(
-                model='gpt-3.5-turbo-0301',
-                messages=self.messages,
-                temperature=1.0,
-                max_tokens=MAX_TOKEN_LEN,
-                top_p=0.6,
-                frequency_penalty=2.0,
-                presence_penalty=0.0,
-                timeout=TIME_OUT,
-            )
+            model='gpt-3.5-turbo-0301',
+            messages=self.messages,
+            temperature=1.0,
+            max_tokens=MAX_TOKEN_LEN,
+            top_p=0.6,
+            frequency_penalty=2.0,
+            presence_penalty=0.0,
+            timeout=TIME_OUT,
+        )
         return response
 
     def get_response(self, prompt):
@@ -45,7 +48,7 @@ class gpt_thread:
         return response
 
     def reset_log(self):
-        self.messages = [{'role': 'system', 'content': initial_prompt}]
+        self.messages = [{'role': 'system', 'content': f'{initial_prompt}，你的角色是 {BOT_ROLE}。'}]
 
     def add_user_content(self, content):
         self.messages.append({'role': USER_ROLE, 'content': content})
@@ -58,6 +61,7 @@ class gpt_thread:
 
     def reset_system_content(self, content):
         self.messages = [{'role': 'system', 'content': content}]
+
 
 if __name__ == '__main__':
     gpt_thread1 = gpt_thread();
