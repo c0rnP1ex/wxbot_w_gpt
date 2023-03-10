@@ -1,0 +1,12 @@
+[
+    {
+        "group": {
+            "group1": {
+                "name": "group name"
+            },
+            "group2": {
+                "name": "group name"
+            }
+        }
+    }
+]
