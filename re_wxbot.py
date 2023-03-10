@@ -56,6 +56,23 @@ class wxbot:
         self.bool_group_auth = False
         self.bool_op_auth = False
         print(self.whitelist)
+        
+    def start(self):
+        self.bot_thread.run()
+        
+    def receive_msg(self, msg):
+        self.msg = msg
+        self.text = self.msg['Text']
+        self.FromUser = self.msg['FromUserName']
+        self.GroupName = self.msg['User']['NickName']
+        self.NickName = self.msg['ActualNickName']
+        self.UserName = self.msg['ActualUserName']
+        if self.bool_whitelist():
+            print(f'{self.NickName} says {self.text}')
+
+    def text_reply(self, reply_msg):
+        print(f'床爪 says {reply_msg}')
+        self.bot_thread.send(reply_msg, self.FromUser)
 
     def bool_whitelist(self, send_res=False):
         if self.bool_group_auth == True:
@@ -92,23 +109,6 @@ class wxbot:
         if send_res:
             self.text_reply(f'{self.NickName} has no authorization!')
         return False
-
-    def receive_msg(self, msg):
-        self.msg = msg
-        self.text = self.msg['Text']
-        self.FromUser = self.msg['FromUserName']
-        self.GroupName = self.msg['User']['NickName']
-        self.NickName = self.msg['ActualNickName']
-        self.UserName = self.msg['ActualUserName']
-        if self.bool_whitelist():
-            print(f'{self.NickName} says {self.text}')
-
-    def start(self):
-        self.bot_thread.run()
-
-    def text_reply(self, reply_msg):
-        print(f'床爪 says {reply_msg}')
-        self.bot_thread.send(reply_msg, self.FromUser)
 
     def help(self):
         if self.op_auth(send_res=False):
