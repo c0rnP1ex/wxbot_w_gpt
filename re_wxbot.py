@@ -39,7 +39,7 @@ class wxbot:
     def __init__(self) -> None:
         self.bot_thread = wx.Core()
         self.bot_thread.auto_login(hotReload=True)
-        self.gpt = gpt_api.gpt_thread()
+        self.gpt_thread = gpt_api.gpt_thread()
         self.msg = {}
         self.text = ''
         self.FromUser = ''
@@ -56,10 +56,10 @@ class wxbot:
         self.bool_group_auth = False
         self.bool_op_auth = False
         print(self.whitelist)
-        
+
     def start(self):
         self.bot_thread.run()
-        
+
     def receive_msg(self, msg):
         self.msg = msg
         self.text = self.msg['Text']
@@ -68,10 +68,14 @@ class wxbot:
         self.NickName = self.msg['ActualNickName']
         self.UserName = self.msg['ActualUserName']
         if self.bool_whitelist():
-            print(f'{self.NickName} says {self.text}')
+            current_time = datetime.now()
+            time_format = current_time.strftime("%Y-%m-%d_%H-%M-%S")
+            print(f'{time_format} From Group {self.GroupName} {self.NickName} says \n{self.text}')
 
     def text_reply(self, reply_msg):
-        print(f'床爪 says {reply_msg}')
+        current_time = datetime.now()
+        time_format = current_time.strftime("%Y-%m-%d_%H-%M-%S")
+        print(f'{time_format} From Group {self.GroupName} 床爪 says \n{reply_msg}')
         self.bot_thread.send(reply_msg, self.FromUser)
 
     def bool_whitelist(self, send_res=False):
@@ -144,23 +148,22 @@ class wxbot:
     def ask(self):
         pattern = r"/ask\s(.*)"
         match = re.findall(pattern, self.text, re.DOTALL)[0]
-        response = self.gpt.get_response(match)
+        response = self.gpt_thread.get_response(match)
         reply_msg = response['choices'][0]['message']['content']
         self.text_reply(reply_msg)
 
     def u_add(self):
         pattern = r"/u add\s(.*)"
         match = re.findall(pattern, self.text, re.DOTALL)[0]
-        self.gpt.add_content('user', match)
+        self.gpt_thread.add_content('user', match)
         self.text_reply(f'[{self.NickName}] 添加了 [{match}]')
 
     def sys(self):
         if self.op_auth(send_res=False):
             if self.text == '/sys su list':
-                time.sleep(0.2)
                 self.text_reply('当前operator')
                 for item in self.operator_NickName:
-                    time.sleep(0.2)
+                    time.sleep(0.3)
                     self.text_reply(item)
                 return
             elif self.text == '/sys su reset':
@@ -170,15 +173,16 @@ class wxbot:
                 self.text_reply('已重置operator')
                 return
             elif self.text == '/sys init':
-                archive(self.gpt.messages)
-                self.gpt.reset_log()
-                self.text_reply('已重置')
+                archive(self.gpt_thread.messages)
+                self.gpt_thread.reset_log()
+                self.text_reply('已保存本轮对话并重置')
                 return
             elif self.text.startswith('/sys init'):
+                archive(self.gpt_thread.messages)
                 pattern = r"/sys init\s(.*)"
                 match = re.findall(pattern, self.text, re.DOTALL)[0]
-                self.gpt.reset_system_content(match)
-                self.text_reply(f'将初始prompt设置为[{match}]')
+                self.gpt_thread.reset_system_content(match)
+                self.text_reply(f'已保存本轮对话并将初始prompt设置为[{match}]')
                 return
             elif self.text.startswith('/sys add'):
                 pattern = r"/sys add\s+(.*)"
@@ -188,18 +192,18 @@ class wxbot:
                     if match.startswith(role):
                         pattern = r"[a-zA-Z]+\s+(.*)"
                         match = re.findall(pattern, match)[0]
-                        self.gpt.add_content(role, match)
+                        self.gpt_thread.add_content(role, match)
                         self.text_reply(f'Add：[{match}] as [{role}].')
                 return
             elif self.text == '/sys print msg':
-                for item in self.gpt.messages[1:]:
+                for item in self.gpt_thread.messages[1:]:
                     role = item['role']
                     content = item['content']
                     time.sleep(0.2)
                     self.text_reply(f'{role} says {content}')
                 return
             elif self.text == '/sys save':
-                archive(self.gpt.messages)
+                archive(self.gpt_thread.messages)
                 self.text_reply('已保存本轮对话')
                 return
             elif self.text == '/sys reload whitelist':
@@ -249,10 +253,10 @@ class wxbot:
                     self.help()
                 elif self.text.startswith('/ask'):
                     self.ask()
-                elif self.text.startswith('/sys'):
-                    self.sys()
                 elif self.text.startswith('/u add'):
                     self.u_add()
+                elif self.text.startswith('/sys'):
+                    self.sys()
                 else:
                     self.text_reply('わからない（')
 
