@@ -1,0 +1,10 @@
+auth.json
+config.json
+whitelist.json
+*.pkl
+history/
+venv/
+.idea/
+__pycache__/
+lib/
+non-used/
