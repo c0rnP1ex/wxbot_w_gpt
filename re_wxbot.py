@@ -55,6 +55,7 @@ class wxbot:
         self.whitelist = get_whitelist()
         self.bool_group_auth = False
         self.bool_op_auth = False
+        self.count = 0
         print(self.whitelist)
 
     def start(self):
@@ -79,7 +80,7 @@ class wxbot:
         self.bot_thread.send(reply_msg, self.FromUser)
 
     def bool_whitelist(self, send_res=False):
-        if self.bool_group_auth == True:
+        if self.bool_group_auth:
             return True
         if self.GroupName not in self.whitelist:
             if send_res:
@@ -148,9 +149,17 @@ class wxbot:
     def ask(self):
         pattern = r"/ask\s(.*)"
         match = re.findall(pattern, self.text, re.DOTALL)[0]
+        if self.count == 10:
+            self.text_reply('总结本轮对话并开启新一轮对话')
+            last_session = self.gpt_thread.get_response('请总结以上对话')
+            archive(self.gpt_thread.messages)
+            self.gpt_thread.reset_log()
+            self.gpt_thread.add_bot_content(last_session['choices'][0]['message']['content'])
+            self.count = 0
         response = self.gpt_thread.get_response(match)
         reply_msg = response['choices'][0]['message']['content']
         self.text_reply(reply_msg)
+        self.count = self.count + 1
 
     def u_add(self):
         pattern = r"/u add\s(.*)"

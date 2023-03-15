@@ -1,6 +1,4 @@
-auth.json
-config.json
-whitelist.json
+*.json
 *.pkl
 history/
 venv/
